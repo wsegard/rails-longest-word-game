@@ -15,11 +15,13 @@ class GamesController < ApplicationController
     serialized_word = open(url).read
     word_object = JSON.parse(serialized_word)
     if word_object['found'] == false
-      return @result = "#{@word.upcase} does not exist"
+      @result = "#{@word.upcase} does not exist"
     elsif incl(@word, @letters.gsub(' ','')) == false
-      return @result = "#{@word.upcase} can't be built out of #{@letters}"
+      @result = "#{@word.upcase} can't be built out of #{@letters}"
     else
-      return @result = "Congratulations!, #{@word.upcase} is a valid english word!"
+      session[:score] = session[:score] + word_object['length'].to_i
+      @score = session[:score]
+      @result = "Congratulations!, #{@word.upcase} is a valid english word!"
     end
   end
 
